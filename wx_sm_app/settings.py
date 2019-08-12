@@ -99,8 +99,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'wx_sm_app',
-        'USER':'mrliu',
-        'PASSWORD':'123',
+        'USER':'',
+        'PASSWORD':'',
         'HOST':'127.0.0.1',
         'OPTIONS':{
             "init_command":"SET foreign_key_checks = 0;",
@@ -115,7 +115,7 @@ CACHES = {
         'LOCATION': 'redis://localhost:6379',
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-             # "PASSWORD": "19970827lbb@!~",
+             # "PASSWORD": "",
         },
     },
 }
