@@ -45,10 +45,10 @@ class BindStudentId(APIView):
                 cache.set(key, cookies, 60 * 60 * 24 * 7)
                 return Response(BaseResponse(code='200', msg='绑定学号成功').result)
             else:
-                return Response(BaseResponse(code='1450', msg='绑定学号失败，请稍后再试').result)
+                return Response(BaseResponse(code='403', msg='绑定学号失败，请稍后再试').result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1450', msg='绑定学号失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='绑定学号失败，请稍后再试').result)
 
 
     def get_csrf_token(self):
@@ -91,7 +91,7 @@ class GetGlass(APIView):
             try:
                 xskb_results = self.session.post(xskb_url, data=xskb_data, headers=header).json()
             except:
-                return Response(BaseResponse(code='1451', msg='登录失效，请重试').result)
+                return Response(BaseResponse(code='500', msg='登录失效，请重试').result)
             print('课表获取成功')
             for i in xskb_results["kbList"]:
                 classObj = {}
@@ -124,7 +124,7 @@ class GetGlass(APIView):
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1450', msg='获取课表信息失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取课表信息失败，请稍后再试').result)
 
 class GetClassDesign(APIView):
     @check_login
@@ -146,7 +146,7 @@ class GetClassDesign(APIView):
             try:
                 xskb_results = self.session.post(xskb_url, data=xskb_data, headers=header).json()
             except:
-                return Response(BaseResponse(code='1451', msg='登录失效，请重试').result)
+                return Response(BaseResponse(code='500', msg='登录失效，请重试').result)
             for i in xskb_results["sjkList"]:
                 classdesignObj = {}
                 classdesignObj['kcmc'] = i['kcmc']
@@ -158,7 +158,7 @@ class GetClassDesign(APIView):
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1450', msg='获取课设失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取课设失败，请稍后再试').result)
 
 class GetExperiment(APIView):
     @check_login
@@ -181,7 +181,7 @@ class GetExperiment(APIView):
             try:
                 syk_result = self.session.post(syk_url, data=syk_data, headers=header).json()
             except:
-                return Response(BaseResponse(code='1451', msg='登录失效，请重试').result)
+                return Response(BaseResponse(code='500', msg='登录失效，请重试').result)
             print('实验课表获取成功')
             for i in syk_result["items"]:
                 classObj = {}
@@ -205,7 +205,7 @@ class GetExperiment(APIView):
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1450', msg='获取实验课表信息失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取实验课表信息失败，请稍后再试').result)
 
 class GetEmptyClassroom(APIView):
     @check_login
@@ -248,7 +248,7 @@ class GetEmptyClassroom(APIView):
             try:
                 query_result = self.session.post(query_url, data=query_data, headers=header).json()
             except:
-                return Response(BaseResponse(code='1451', msg='登录失效，请重试').result)
+                return Response(BaseResponse(code='500', msg='登录失效，请重试').result)
             print('获取空教室成功')
             for i in query_result["items"]:
                 emptyClassroomObj = {}
@@ -265,7 +265,7 @@ class GetEmptyClassroom(APIView):
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1450', msg='获取空教室失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取空教室失败，请稍后再试').result)
 
 
 class GetPreWeek(APIView):
