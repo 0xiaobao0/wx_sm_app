@@ -21,6 +21,6 @@ class GetQiniuToken(APIView):
             'mimeLimit': 'image/*'
         })
         data = {'token': token, 'key': key}
-        result = BaseResponse(code=1020, msg='获取上传token成功', data=data).result
+        result = BaseResponse(code=200, msg='获取上传token成功', data=data).result
         result['uptoken'] = token
         return Response(result)
