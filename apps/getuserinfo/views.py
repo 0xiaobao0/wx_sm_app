@@ -20,13 +20,13 @@ class Regist(APIView):
                 user_data = model_to_dict(UserInfo.objects.get(openId=openid))
                 user_data.pop('userid')
                 user_data.pop('openId')
-                return Response(BaseResponse(code='1001', msg='用户注册成功', data=user_data).result)
+                return Response(BaseResponse(code='400', msg='用户注册成功', data=user_data).result)
             else:
-                return Response(BaseResponse(code='1404', msg='用户已存在').result)
+                return Response(BaseResponse(code='403', msg='用户已存在').result)
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1405', msg='用户注册失败').result)
+            return Response(BaseResponse(code='500', msg='用户注册失败').result)
 
 class ChangeUserInfo(APIView):
     @check_login
@@ -53,11 +53,11 @@ class ChangeUserInfo(APIView):
             user_data = model_to_dict(UserInfo.objects.get(openId=openid))
             user_data.pop('userid')
             user_data.pop('openId')
-            return Response(BaseResponse(code='1044', msg='修改用户信息成功', data=user_data).result)
+            return Response(BaseResponse(code='200', msg='修改用户信息成功', data=user_data).result)
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1404', msg='修改用户信息失败').result)
+            return Response(BaseResponse(code='500', msg='修改用户信息失败').result)
 
 
 
@@ -68,13 +68,13 @@ class GetuserInfo(APIView):
             user_data = model_to_dict(UserInfo.objects.get(openId=openid))
             user_data.pop('userid')
             user_data.pop('openId')
-            return Response(BaseResponse(code='1002', msg='获取用户信息成功', data=user_data).result)
+            return Response(BaseResponse(code='200', msg='获取用户信息成功', data=user_data).result)
         except Exception as e:
             print(e)
             not_found = ('UserInfo matching query does not exist.',)
             if(e.args == not_found):
                 # 该用户为新用户
-                return Response(BaseResponse(code='1043', msg='用户尚未注册').result)
+                return Response(BaseResponse(code='403', msg='用户尚未注册').result)
             else:
-                return Response(BaseResponse(code='1042', msg='获取用户信息出错').result)
+                return Response(BaseResponse(code='403', msg='获取用户信息出错').result)
 
