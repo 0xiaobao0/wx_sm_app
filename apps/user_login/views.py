@@ -18,7 +18,7 @@ class UserLogin(APIView):
             result = requests.get(jscode2session).json()
             # print(result)
             if 'errmsg' in result.keys():
-                return Response(BaseResponse(code='1400', msg='用户登录失败').result)
+                return Response(BaseResponse(code='401', msg='用户登录失败').result)
             else:
                 openid_session = Openid_Session(openId=result['openid'], session_key=result['session_key'])
                 openid_session.save()
@@ -29,7 +29,7 @@ class VerifyToken(APIView):
     @check_login
     def get(self, request, openid):
         if(openid):
-            return Response(BaseResponse(code='1400', msg='token有效').result)
+            return Response(BaseResponse(code='200', msg='token有效').result)
 
 
 
