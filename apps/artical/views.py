@@ -27,10 +27,10 @@ class Topic(APIView):
                 return Response(BaseResponse(code='200', msg='话题提交成功',
                                              data=model_to_dict(TopicProfile.objects.last())).result)
             else:
-                return Response(BaseResponse(code='1410', msg='请按照格式填写必须字段后再次提交').result)
+                return Response(BaseResponse(code='403', msg='请按照格式填写必须字段后再次提交').result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1411', msg='发布过程出现意外，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='发布过程出现意外，请稍后再试').result)
 
     # @check_login
     def get(self, request):
@@ -46,7 +46,7 @@ class Topic(APIView):
             return Response(BaseResponse(code='200', msg='获取话题成功', data=model_to_dict(topicObj)).result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1411', msg='获取话题失败').result)
+            return Response(BaseResponse(code='500', msg='获取话题失败').result)
 
 
 
@@ -96,16 +96,16 @@ class Like(APIView):
                     str(articalAuthorId),
                     message_dict
                 )
-                return Response(BaseResponse(code='1042', msg='点赞成功', data={key: likeState}).result)
+                return Response(BaseResponse(code='200', msg='点赞成功', data={key: likeState}).result)
             else:
                 if(cache.has_key(key)):
                     cache.delete_pattern(key)
-                    return Response(BaseResponse(code='1042', msg='取消点赞成功', data={key: likeState}).result)
+                    return Response(BaseResponse(code='200', msg='取消点赞成功', data={key: likeState}).result)
 
 
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1412', msg='点赞失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='点赞失败，请稍后再试').result)
 
     @check_login
     def get(self, request, openid):
@@ -114,10 +114,10 @@ class Like(APIView):
             cacheKeys = "{}=>{}".format(userId, '*')
             keys = cache.keys(cacheKeys)
             articalId = [int(i.split('>')[1]) for i in keys]
-            return Response(BaseResponse(code='1043', msg='获取用户点赞信息成功', data=articalId).result)
+            return Response(BaseResponse(code='200', msg='获取用户点赞信息成功', data=articalId).result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1413', msg='获取用户点赞信息失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取用户点赞信息失败，请稍后再试').result)
 
 
 class GetMyArticalList(APIView):
@@ -130,13 +130,13 @@ class GetMyArticalList(APIView):
             page_message_list = message_Page.paginate_queryset(queryset=myMessages, request=request,
                                                                view=self)  # 把数据放在分页器上面
             serializer = ArticalSerrializer(instance=page_message_list, many=True)  # 序列化数据
-            res = BaseResponse(code='1041', msg='获取我的文章列表成功',
+            res = BaseResponse(code='200', msg='获取我的文章列表成功',
                                data=serializer.data)
             res.next = message_Page.get_next_link()
             return Response(res.result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1411', msg='获取我的文章列表失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取我的文章列表失败，请稍后再试').result)
 
 class GetArticalList(APIView):
     # @check_login
@@ -146,13 +146,13 @@ class GetArticalList(APIView):
             message_Page = Message_Page()  # 实例化分页器，
             page_message_list = message_Page.paginate_queryset(queryset=messages, request=request, view=self)  # 把数据放在分页器上面
             serializer = ArticalSerrializer(instance=page_message_list, many=True)  # 序列化数据
-            res = BaseResponse(code='1040', msg='获取文章列表成功',
+            res = BaseResponse(code='200', msg='获取文章列表成功',
                                          data=serializer.data)
             res.next = message_Page.get_next_link()
             return Response(res.result)
         except Exception as e:
             traceback.print_exc()
-            return Response(BaseResponse(code='1410', msg='获取文章列表失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='获取文章列表失败，请稍后再试').result)
 
 
 class PostArtical(APIView):
@@ -165,13 +165,13 @@ class PostArtical(APIView):
             valid = artical_form.is_valid()
             if valid == True:
                 artical_model_form.save()
-                return Response(BaseResponse(code='1010', msg='文章发表成功',
+                return Response(BaseResponse(code='200', msg='文章发表成功',
                                              data=model_to_dict(ArticalProfile.objects.last())).result)
             else:
-                return Response(BaseResponse(code='1410', msg='请填写必须字段后发表').result)
+                return Response(BaseResponse(code='403', msg='请填写必须字段后发表').result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1010', msg='发布过程出现意外，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='发布过程出现意外，请稍后再试').result)
 
 
 class PostDeclare(APIView):
@@ -184,13 +184,13 @@ class PostDeclare(APIView):
             valid = declare_form.is_valid()
             if valid == True:
                 declare_model_form.save()
-                return Response(BaseResponse(code='1010', msg='表白发表成功',
+                return Response(BaseResponse(code='200', msg='表白发表成功',
                                              data=model_to_dict(DeclareProfile.objects.last())).result)
             else:
-                return Response(BaseResponse(code='1410', msg='请填写必须字段后发表').result)
+                return Response(BaseResponse(code='403', msg='请填写必须字段后发表').result)
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1010', msg='发布过程出现意外，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='发布过程出现意外，请稍后再试').result)
 
 # 文章评论
 class PostComment(APIView):
@@ -205,16 +205,16 @@ class PostComment(APIView):
             valid = comment_form.is_valid()
             if valid == True:
                 comment_model_form.save()
-                result = BaseResponse(code='1030', msg='评论发表成功',
+                result = BaseResponse(code='200', msg='评论发表成功',
                                       data=model_to_dict(ArticalCommentProfile.objects.last())).result
                 return Response(result)
             else:
-                return Response(BaseResponse(code='1431', msg='请填写必须字段后发表').result)
+                return Response(BaseResponse(code='403', msg='请填写必须字段后发表').result)
 
         #失败时执行下面操作
         except Exception as e:
             print(e)
-            return Response(BaseResponse(code='1430', msg='评论失败，请稍后再试').result)
+            return Response(BaseResponse(code='500', msg='评论失败，请稍后再试').result)
 
 class GetComment(APIView):
     def post(self, request):
@@ -224,7 +224,7 @@ class GetComment(APIView):
         page_message_list = message_Page.paginate_queryset(queryset=comment, request=request,
                                                            view=self)  # 把数据放在分页器上面
         serializer = CommentSerrializer(instance=page_message_list, many=True)  # 序列化数据
-        res = BaseResponse(code='1041', msg='获取文章评论成功',
+        res = BaseResponse(code='200', msg='获取文章评论成功',
                            data=serializer.data)
         res.next = message_Page.get_next_link()
         return Response(res.result)
