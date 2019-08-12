@@ -24,9 +24,9 @@ def check_login(func):
                 openid = Token['openid']
                 return func(self, request, openid)
             else:
-                return Response(BaseResponse(code='1401', msg='用户认证失败').result)
+                return Response(BaseResponse(code='401', msg='用户认证失败').result)
         except:
-            return Response(BaseResponse(code='1402', msg='请先登录').result)
+            return Response(BaseResponse(code='403', msg='请先登录').result)
     return wrapper
 
 def auth_admin(func):
@@ -41,13 +41,13 @@ def auth_admin(func):
                 userid = UserInfo.objects.filter(openId=openid).first().userid
                 adminUser = AdminInfo.objects.filter(userid=userid).first()
                 if (adminUser == None):
-                    return Response(BaseResponse(code='1402', msg='该用户无权进行该操作').result)
+                    return Response(BaseResponse(code='403', msg='该用户无权进行该操作').result)
                 else:
                     return func(self, request, openid)
             else:
-                return Response(BaseResponse(code='1401', msg='用户认证失败').result)
+                return Response(BaseResponse(code='401', msg='用户认证失败').result)
         except:
-            return Response(BaseResponse(code='1402', msg='请先登录').result)
+            return Response(BaseResponse(code='401', msg='请先登录').result)
     return wrapper
 
 def generate_jwt(openid):
